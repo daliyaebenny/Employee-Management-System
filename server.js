@@ -1,48 +1,57 @@
-//import express and mysql2
-const express = require ('express');
-//const mysql = require('mysql2');
-const emsRoutes = require('./routes/content_management');
 
-const PORT = process.env.PORT||3001;
+const express = require('express');
+// Import and require mysql2
+const mysql = require('mysql2');
+
+const PORT = process.env.PORT || 3001;
 const app = express();
 
-//Express middleware
-app.use(express.urlencoded({extended:false}));
+const cTable = require('console.table');
+
+// Express middleware
+app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
-app.use(emsRoutes);
-
-// //Connect to database
-// const db = mysql.createConnection({
-//     host:'localhost',
-//     user :'root',
-//     password:'root',
-//     database:'ems_db'
-// },
-// console.log('Connected to ems_db')
-// );
-
-// // // Query database
-// // db.query('SELECT * FROM employee', function (err, results) {
-// //     console.log(results);
-// //   });
+// Connect to database
+const db = mysql.createConnection(
+  {
+    host: 'localhost',
+    user: 'root',
+    password: 'root',
+    database: 'ems_db'
+  },
+  console.log(`Connected to the books_db database.`)
+);
 
 
-// app.get('/api/employees', (req, res) => {
-//     const sql = 'SELECT * FROM employee';
-    
-//     db.query(sql, (err, rows) => {
-//       if (err) {
-//         res.status(500).json({ error: err.message });
-//          return;
-//       }
-//       res.json({
-//         message: 'success',
-//         data: rows
-//       });
-//     });
-//   });
+
+
+function viewAllEmployees(){
+    db.query('SELECT * FROM employee', function (err, results) {
+        const table = cTable.getTable(results);
+        console.log(table);
+        });
+}
+
+function viewAllRoles(){
+    db.query('SELECT * FROM roles', function (err, results) {
+        const table = cTable.getTable(results);
+        console.log(table);
+    });
+}
+function viewAllDepartments(){
+    db.query('SELECT * FROM department', function (err, results) {
+        const table = cTable.getTable(results);
+        console.log(table);
+        });
+}
+viewAllEmployees();
+viewAllRoles();
+viewAllDepartments();
+app.use((req, res) => {
+  res.status(404).end();
+});
 
 app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
-  });
+  console.log(`Server running on port ${PORT}`);
+});
