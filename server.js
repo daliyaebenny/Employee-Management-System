@@ -45,9 +45,29 @@ function viewAllDepartments(){
         });
 }
 
+// addDepartment
 function addDepartment(seedData){
-    
-    console.log(`INSERT INTO department (name) VALUES (${seedData.dept_name})`);
+    db.query(`INSERT INTO department (name) VALUES (?)`,seedData.dept_name,function (err, results,) {
+        console.log(results);
+    });
+}
+
+// addEmployee
+function addEmployee(seedData){
+    db.query(`INSERT INTO employee (fname,lname,role_id,manager_id) VALUES (?,?,?,?)`,Object.values(seedData),function (err, results,) {
+        console.log(results);
+    });
+}
+
+// addRole
+function addRole(seedData){
+    db.query(`INSERT INTO roles (title,salary,dept_id) VALUES (?,?,?)`,Object.values(seedData),function (err, results,) {
+        console.log(results);
+    });
+}
+
+// addDepartment
+function addDepartment(seedData){
     db.query(`INSERT INTO department (name) VALUES (?)`,seedData.dept_name,function (err, results,) {
         console.log(results);
     });
@@ -65,12 +85,27 @@ function addDepartment(seedData){
 // viewAllRoles();
 // viewAllDepartments();
 
+const etempData = {
+    lname:'Manager',
+    fname:'13000',
+    role_id:2,
+    manager_id:1
 
-const tempData = {
-    dept_name:'Trial'
 }
-console.log('before call');
-addDepartment(tempData);
+addEmployee(etempData);
+
+// const rtempData = {
+//     title:'Manager',
+//     salary:'13000',
+//     dept_id:2
+// }
+// addRole(rtempData);
+
+// const dtempData = {
+//     dept_name:'Trial'
+// }
+
+// addDepartment(dtempData);
 
 
 app.use((req, res) => {
