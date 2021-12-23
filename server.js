@@ -51,12 +51,70 @@ function addDepartment(seedData){
 }
 
 // addEmployee
-function addEmployee(seedData){
-    db.query(`INSERT INTO employee (fname,lname,role_id,manager_id) VALUES (?,?,?,?)`,
-    Object.values(seedData),function (err, results,) {
-        console.log(results);
-        toBeContinued();
+async function addEmployee(){
+
+    const roleList = new Array();
+    db.query('SELECT DISTINCT title FROM roles', function (err, results) {
+        roleList.push(...(results.map(({title}) => title)));
+        console.log(roleList);
+       
     });
+    const managerList = new Array();
+    db.query(`SELECT fname from roles INNER JOIN employee WHERE employee.role_id = roles.id AND roles.title = 'Manager'`,function(err,results){
+        managerList.push(...(results.map(({fname}) => fname)));
+        console.log(managerList);
+    });  
+    
+   await inquirer.prompt([
+        {
+              type: "input",
+              name: "fName",
+              message: "Enter First Name",
+        },
+        {
+            type: "input",
+            name: "lName",
+            message: "Enter Last Name",
+        },
+        {
+            type: "list",
+            name: "role",
+            message: "Choose the role",
+            choices: roleList,
+        },
+        {
+            type: "list",
+            name: "manager",
+            message: "Choose the Mnager",
+            choices: managerList,
+        },
+
+    ]).then((answer)=>{
+        
+        db.promise().query('SELECT id FROM roles WHERE title =?',answer.role, function (err, results) {
+          answer.role= results.map(({id}) => id); 
+        });
+        db.promise().query('SELECT id from employee  WHERE employee.fname= ?',answer.manager,function(err,results){
+          answer.manager= results.map(({id}) => id); 
+        }); 
+       
+        return answer;
+    }).then((response)=>{
+    
+        db.query('INSERT INTO employee (fname,lname,role_id,manager_id) VALUES (?,?,?,?)',
+        [response.fName,response.lName,response.role,response.manager],function (err, results,) {
+        // console.log(results.affectedRows);
+        console.log(err);
+        });
+       // toBeContinued();
+    });
+       
+
+
+
+
+
+    
 }
 
 // addRole
@@ -118,7 +176,7 @@ async function start(){
         viewAllEmployees();
         break;
         case 'Add an Employee':
-        addEmployee(data);
+        addEmployee();  
         break;
       case 'Add a role':
         addRole(data);
