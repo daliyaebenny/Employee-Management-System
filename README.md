@@ -2,7 +2,7 @@
   ![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg) 
 
   ## Description 
-  Command-line application to manage a company's employee database, using Node.js, Inquirer, and MySQL.
+  Developers frequently have to create interfaces that allow non-developers to easily view and interact with information stored in databases. These interfaces are called **content management systems (CMS)**.Employee Management System is a command-line application to manage a company's employee database, using Node.js, Inquirer, and MySQL.
 
   ## Table of contents 
 
