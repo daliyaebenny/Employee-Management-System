@@ -21,7 +21,15 @@
   ## License
     This project is licensed under the MIT license.
   ## Mock-Up
-    The following video shows an example of the application being used from the command line:
+    The following video shows an example of the application being used from the command line:    
+
+
+https://user-images.githubusercontent.com/25469240/147296857-149cdd9b-e6dc-4e2a-a070-4ed9e5378e9f.mp4
+
+
+    
+    
+   
   ## Contributors
   Daliya Benny    
   ## Contact
